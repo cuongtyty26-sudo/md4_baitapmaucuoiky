@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đăng nhập - Quản lý cửa hàng điện thoại</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="auth-card panel">
+  <h1 class="h4 mb-1" id="title">Đăng nhập quản trị</h1>
+  <p class="text-muted small mb-3" id="hint">Nhập tài khoản admin để vào trang quản lý.</p>
+  <div id="msg" class="alert d-none" role="alert"></div>
+  <div class="mb-3">
+    <label class="form-label" for="username">Tên đăng nhập</label>
+    <input id="username" class="form-control" autocomplete="username">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="password">Mật khẩu</label>
+    <input id="password" type="password" class="form-control" autocomplete="current-password">
+    <div class="form-text d-none" id="pwRule">Tối thiểu 6 ký tự, gồm chữ thường, chữ hoa, số và ký tự đặc biệt.</div>
+  </div>
+  <button id="submitBtn" class="btn btn-primary w-100">Đăng nhập</button>
+  <button id="toggleBtn" class="btn btn-link w-100 mt-2">Chưa có tài khoản? Đăng ký</button>
+</div>
+<script>
+let registerMode = false;
+const $ = id => document.getElementById(id);
+
+function show(text, type) {
+  $('msg').className = 'alert alert-' + type;
+  $('msg').textContent = text;
+}
+
+function setMode(reg) {
+  registerMode = reg;
+  $('title').textContent = reg ? 'Đăng ký tài khoản admin' : 'Đăng nhập quản trị';
+  $('hint').textContent = reg ? 'Tạo tài khoản mới, sau đó quay lại đăng nhập.' : 'Nhập tài khoản admin để vào trang quản lý.';
+  $('submitBtn').textContent = reg ? 'Đăng ký' : 'Đăng nhập';
+  $('toggleBtn').textContent = reg ? 'Đã có tài khoản? Đăng nhập' : 'Chưa có tài khoản? Đăng ký';
+  $('pwRule').classList.toggle('d-none', !reg);
+  $('msg').className = 'alert d-none';
+}
+
+async function submit() {
+  const body = JSON.stringify({ username: $('username').value.trim(), password: $('password').value });
+  const res = await fetch('/api/auth/' + (registerMode ? 'register' : 'login'), {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) return show(data.message || 'Có lỗi xảy ra', 'danger');
+  if (registerMode) { setMode(false); show('Đăng ký thành công. Hãy đăng nhập.', 'success'); $('password').value = ''; }
+  else location.href = 'index.html';
+}
+
+$('submitBtn').onclick = submit;
+$('toggleBtn').onclick = () => setMode(!registerMode);
+document.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+</script>
+</body>
+</html>

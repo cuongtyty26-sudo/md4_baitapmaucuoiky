@@ -1,0 +1,15 @@
+:root { --ink:#1e2a38; --paper:#f4f6f8; --teal:#0f8b8d; --line:#dde3ea; }
+body { font-family:'Be Vietnam Pro',system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+.topbar { background:var(--ink); color:#fff; }
+.topbar .brand { font-weight:700; letter-spacing:.2px; }
+.nav-tabs .nav-link { color:var(--ink); border:0; border-bottom:3px solid transparent; font-weight:500; }
+.nav-tabs .nav-link.active { color:var(--teal); border-bottom-color:var(--teal); background:transparent; }
+.nav-tabs { border-bottom:1px solid var(--line); }
+.btn-primary { background:var(--teal); border-color:var(--teal); }
+.btn-primary:hover { background:#0b6f71; border-color:#0b6f71; }
+.panel { background:#fff; border:1px solid var(--line); border-radius:8px; padding:1.25rem; }
+table th { font-weight:600; white-space:nowrap; }
+.money { font-variant-numeric:tabular-nums; text-align:right; }
+.invoice-lines { margin:0; padding-left:1rem; font-size:.875rem; }
+.auth-card { max-width:400px; margin:8vh auto; }
+:focus-visible { outline:2px solid var(--teal); outline-offset:2px; }
